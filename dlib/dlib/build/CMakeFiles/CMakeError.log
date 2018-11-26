@@ -1,0 +1,54 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec644325684/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec644325684.dir/build.make CMakeFiles/cmTryCompileExec644325684.dir/build
+make[1]: Entering directory `/root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec644325684.dir/CheckSymbolExists.c.o
+/opt/hisi-linux/x86-arm/aarch64-himix100-linux/bin/aarch64-himix100-linux-gcc    -o CMakeFiles/cmTryCompileExec644325684.dir/CheckSymbolExists.c.o   -c /root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec644325684
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec644325684.dir/link.txt --verbose=1
+/opt/hisi-linux/x86-arm/aarch64-himix100-linux/bin/aarch64-himix100-linux-gcc       CMakeFiles/cmTryCompileExec644325684.dir/CheckSymbolExists.c.o  -o cmTryCompileExec644325684 -rdynamic 
+CMakeFiles/cmTryCompileExec644325684.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x14): undefined reference to `pthread_create'
+CheckSymbolExists.c:(.text+0x18): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[1]: *** [cmTryCompileExec644325684] Error 1
+make[1]: Leaving directory `/root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec644325684/fast] Error 2
+
+File /root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1384123660/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1384123660.dir/build.make CMakeFiles/cmTryCompileExec1384123660.dir/build
+make[1]: Entering directory `/root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1384123660.dir/CheckFunctionExists.c.o
+/opt/hisi-linux/x86-arm/aarch64-himix100-linux/bin/aarch64-himix100-linux-gcc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec1384123660.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1384123660
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1384123660.dir/link.txt --verbose=1
+/opt/hisi-linux/x86-arm/aarch64-himix100-linux/bin/aarch64-himix100-linux-gcc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec1384123660.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1384123660 -rdynamic -lpthreads 
+/opt/hisi-linux/x86-arm/aarch64-himix100-linux/host_bin/../lib/gcc/aarch64-linux-gnu/6.3.0/../../../../aarch64-linux-gnu/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [cmTryCompileExec1384123660] Error 1
+make[1]: Leaving directory `/root/ncnn/ncnn/examples/dlib-19.15/dlib/build/CMakeFiles/CMakeTmp'
+make: *** [cmTryCompileExec1384123660/fast] Error 2
+
+
