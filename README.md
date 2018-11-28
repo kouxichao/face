@@ -1,4 +1,4 @@
-#  project for hisi3559a.
+#  somecode.
 
 # 编译成静态库：
 
