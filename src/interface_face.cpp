@@ -7,8 +7,10 @@
 #include "dlib/image_processing.h"
 #include "face_recognization.h"
 
+#ifdef JPG_DEMO
 //测试使用
 static int id= 0;
+#endif
 
 static  sqlite3* facefeatures;
 static  ncnn::Mat fc;
@@ -34,13 +36,13 @@ int normalize(ncnn::Mat& fc1)
     return 0;
 }
 
-int knn(std::vector< std::pair<int, float> >& re, int k)
+int knn(std::vector< std::pair<int, float> >& re, int k, float threshold)
 {
     std::pair<int, float> temp;
     for(int i=0; i<re.size(); i++)
     {
-	for(int j=i+1; j<re.size(); j++)
-	{
+	    for(int j=i+1; j<re.size(); j++)
+	    {
             if(re[j].second > re[i].second)
             {
             	temp = re[i];
@@ -50,7 +52,7 @@ int knn(std::vector< std::pair<int, float> >& re, int k)
         }
     }
    
-    if(re[0].second > 0.6)
+    if(re[0].second > threshold)
     { 
         std::vector< std::pair<int, int> > vote;
         vote.push_back(std::make_pair(re[0].first, 1));
@@ -106,14 +108,15 @@ void DKFaceRegisterInit()
     }
 }
 
-int DKFaceRegisterProcess(char* rgbfilename, int iHeight, int iWidth, DKSMultiDetectionRes boxes, DKSFaceRegisterParam param)
+int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDetectionRes boxes, DKSFaceRegisterParam param)
 {
-/*
+
+#ifdef JPG_DEMO
     //使用图片路径进行测试（仅作测试时用,rgbfilename是jpg,png文件路径）
     dlib::array2d<dlib::rgb_pixel> img, face_chips;
     load_image(img, rgbfilename);
-*/
-
+    printf("---");
+#else
     FILE *stream = NULL; 
     stream = fopen(rgbfilename, "rb");   
 
@@ -143,9 +146,16 @@ int DKFaceRegisterProcess(char* rgbfilename, int iHeight, int iWidth, DKSMultiDe
             assign_pixel( imga[r][c], p );            
         }
     }
-    
+
+#endif  
+
+#ifdef JPG_DEMO
     //脸部对齐
     DKSBox  box = boxes.boxes[id].box;
+#else
+    DKSBox  box = boxes.boxes[param.index].box;
+#endif
+
     int y_top = box.y1 > box.y2 ? box.y2 : box.y1;
     int y_bottom = box.y3 > box.y4 ? box.y3 : box.y4;
     int x_left = box.x1 > box.x4 ? box.x4 : box.x1;
@@ -297,14 +307,14 @@ void DKFaceRecognizationInit()
 
 }
 
-int DKFaceRecognizationProcess(char* rgbfilename, int iHeight, int iWidth, DKSMultiDetectionRes boxes, DKSFaceRecognizationParam param)
+int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDetectionRes boxes, DKSFaceRecognizationParam param)
 {
     clock_t start = clock();
-/*
+#ifdef JPG_DEMO
     //使用图片路径进行测试（仅作测试时用,rgbfilename是jpg,png文件路径）
     dlib::array2d<dlib::rgb_pixel> img, face_chips;
     load_image(img, rgbfilename);
-*/    
+#else    
     FILE *stream = NULL; 
     stream = fopen(rgbfilename, "rb");   
 
@@ -334,8 +344,15 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iHeight, int iWidth, DKSMu
             assign_pixel( imga[r][c], p );            
         }
     }
-    
+ #endif
+
+#ifdef JPG_DEMO
+    //脸部对齐
     DKSBox  box = boxes.boxes[id].box;
+#else
+    DKSBox  box = boxes.boxes[param.index].box;
+#endif
+
     int y_top = box.y1 > box.y2 ? box.y2 : box.y1;
     int y_bottom = box.y3 > box.y4 ? box.y3 : box.y4;
     int x_left = box.x1 > box.x4 ? box.x4 : box.x1;
@@ -425,7 +442,7 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iHeight, int iWidth, DKSMu
     }
     
     int ID;
-    ID = knn(results, 3);
+    ID = knn(results, 3, param.threshold);
     
     finsh = clock();
     fprintf(stderr, "knn cost %d ms\n", (finsh - start)/1000);

@@ -10,7 +10,10 @@ int main(int argc, char* argv[])
     boxes.num = 1;
     boxes.boxes[0] = box[0];
     DKSFaceRegisterParam rgp;
+    rgp.index = 0;
     DKSFaceRecognizationParam rcp;
+    rcp.index = 0;
+    rcp.threshold = 6;
     
     //注册
     if(*(argv[1]) == '0')

@@ -38,12 +38,13 @@ typedef struct
 
 typedef struct
 {
+    int index; //边界框索引
     float threshold; // 相似度阈值，相似度超过该值认为不能认出该人脸
 }DKSFaceRecognizationParam;
 
 typedef struct
 {
-    int undefined;
+    int index; //边界框索引
 }DKSFaceRegisterParam;
 
 /*
@@ -73,7 +74,7 @@ int knn(std::vector< std::pair<int, float> >& re, int k);
 void DKFaceRegisterInit();
 
 // 根据检测到的人脸结果计算特征
-int DKFaceRegisterProcess(char * imgfilename, int iHeight, int iWidth, DKSMultiDetectionRes boxes, DKSFaceRegisterParam param);
+int DKFaceRegisterProcess(char * imgfilename, int iWidth, int iHeight, DKSMultiDetectionRes boxes, DKSFaceRegisterParam param);
 
 // 将计算好的特征存入sqlite中（flag为1），或取消学习人脸（flag为0）
 void DKFaceRegisterEnd(int flag, int count);
@@ -83,7 +84,7 @@ void DKFaceRegisterEnd(int flag, int count);
 void DKFaceRecognizationInit();
 
 // �，如果没有识别出或相似度大于柨识别参数中定义），则输出null，否则输出识别出的人的index。
-int DKFaceRecognizationProcess(char * imgfilename, int iHeight, int iWidth, DKSMultiDetectionRes boxes, DKSFaceRecognizationParam param);
+int DKFaceRecognizationProcess(char * imgfilename, int iWidth, int iHeight, DKSMultiDetectionRes boxes, DKSFaceRecognizationParam param);
 
 // 释放人脸识别资源
 void DKFaceRecognizationEnd();
