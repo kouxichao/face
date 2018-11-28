@@ -115,7 +115,6 @@ int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDe
     //使用图片路径进行测试（仅作测试时用,rgbfilename是jpg,png文件路径）
     dlib::array2d<dlib::rgb_pixel> img, face_chips;
     load_image(img, rgbfilename);
-    printf("---");
 #else
     FILE *stream = NULL; 
     stream = fopen(rgbfilename, "rb");   

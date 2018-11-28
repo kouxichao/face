@@ -1,6 +1,6 @@
-#include "net.h"
 #ifndef FACE_RECOGNIZATION_h
 #define FACE_RECOGNIZATION_h
+#include "net.h"
 
 #ifndef DKMAXBOXNUM
 #define DKMAXBOXNUM 30 // 最多可检测对象数目
@@ -33,7 +33,7 @@ typedef struct
 typedef struct
 {
     int num; // 当前检测出的物体总数目
-    DKSSingleDetectionRes boxes[30];
+    DKSSingleDetectionRes boxes[DKMAXBOXNUM];
 }DKSMultiDetectionRes;
 
 typedef struct

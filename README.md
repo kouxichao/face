@@ -7,7 +7,7 @@ cd src
 make -j$(nproc)
 生成libface.a.
 ```
-#使用说明：
+# 使用说明：
 
 提供六个主要接口函数：
 
@@ -65,7 +65,7 @@ typedef struct
 typedef struct
 {
     int num; // 当前检测出的物体总数目
-    DKSSingleDetectionRes boxes[30];
+    DKSSingleDetectionRes boxes[DKMINFACEREGISTERIMGNUM];
 }DKSMultiDetectionRes;
 
 typedef struct
@@ -79,11 +79,11 @@ typedef struct
     int index; //待识别边界框索引
 }DKSFaceRegisterParam;
 ```
-#示例
+# 示例
 执行命令：
 cd src
 make MODE="-DJPG_DEMO"
-生成可执行文件demo_face.
+生成可执行文件demo_face,执行需要把models下的文件与其放在同一目录
 注:demo_face的输入是jpg或png的文件，而前面生成的库输入是rgb文件。
 
 

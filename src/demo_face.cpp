@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     rgp.index = 0;
     DKSFaceRecognizationParam rcp;
     rcp.index = 0;
-    rcp.threshold = 6;
+    rcp.threshold = 0.6;
     
     //注册
     if(*(argv[1]) == '0')
@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
         for(int i = 0; i < count; i++)
         {
             char*   rgbfilename = argv[2+i+1];
-            DKFaceRegisterProcess(rgbfilename, 100, 100, boxes, rgp);//示例中没有用到100,100两个参数。
+            DKFaceRegisterProcess(rgbfilename, 100, 100, boxes, rgp);//示例中没有用到iWidth,iHeight两个参数。
             DKFaceRegisterEnd(count - (i+1) ? 1 : 0, i+1);
         }
     }
