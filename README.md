@@ -26,7 +26,8 @@ void DKFaceRegisterEnd(int flag, int count);
 // 初始化，连接sqlite，获取人脸库中各个人脸的特征
 void DKFaceRecognizationInit();
 
-// 运行knn人脸识别，得到识别结果，如果没有识别出或相似度大于某一阈值（在识别参数中定义），则输出null，否则输出识别出的人的index。
+// 运行knn人脸识别，得到识别结果，如果没有识别出或相似度小于某一阈值（在识别参数中定义），则输出null，否则输出识别出的人的index。
+// 返回值索引从0开始，返回-1表示未知。
 int DKFaceRecognizationProcess(char * rgbfilename, int iWidth, int iHeight, DKSMultiDetectionRes boxes, DKSFaceRecognizationParam param);
 
 // 释放人脸识别资源
