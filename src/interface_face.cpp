@@ -82,8 +82,10 @@ int knn(std::vector< std::pair<int, float> >& re, int k, float threshold)
                 max = j;
             }
             // printf("(ID:%d)__ballot:%d\n", vote[j].first, vote[j].second);
-        }   
+        } 
+#if debug  
         printf("results:\n(ID:%d)__ballot:%d\n", vote[max].first, vote[max].second);
+#endif
         return vote[max].first;
     }
     else
@@ -301,14 +303,13 @@ void DKFaceRecognizationInit()
     }
     else
     {
-        fprintf(stdout, "Opened database successfully\n");
+        fprintf(stderr, "Opened database successfully\n");
     }
 
 }
 
 int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDetectionRes boxes, DKSFaceRecognizationParam param)
 {
-    clock_t start = clock();
 #ifdef JPG_DEMO
     //使用图片路径进行测试（仅作测试时用,rgbfilename是jpg,png文件路径）
     dlib::array2d<dlib::rgb_pixel> img, face_chips;
@@ -373,7 +374,9 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     int row = (int)face_chips.nr();
 
     ncnn::Mat in = ncnn::Mat::from_pixels_resize((unsigned char*)(&face_chips[0][0]), ncnn::Mat::PIXEL_RGB, col, row, 112, 112);
-
+#if debug   
+    clock_t start = clock();
+#endif
     ncnn::Net mobilefacenet;
     mobilefacenet.load_param("mobilefacenet.param");
     mobilefacenet.load_model("mobilefacenet.bin");
@@ -382,10 +385,10 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     ex.input("data", in);
     ex.extract("fc1", fc);
     normalize(fc);
-    
+#if debug       
     clock_t finsh = clock();
     fprintf(stderr, "get_feature cost %d ms\n", (finsh-start)/1000);
-   
+#endif  
     //获取行数
     sqlite3_stmt* stat;
     int rc = sqlite3_prepare_v2(facefeatures, "SELECT COUNT(*) FROM FEATURES", -1, &stat, NULL);
@@ -403,7 +406,9 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     sqlite3_finalize(stat);
 
     //读取数据库中脸部特征数据
+#if debug   
     start = clock();
+#endif  
     int i=0;
     float similarity;
     std::vector< std::pair<int, float> > results;
@@ -417,8 +422,9 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
             return -1;
         }
         int blob_length = sqlite3_blob_bytes(blob);
-        printf("blob_length_%d\n", blob_length);
-    
+#if debug   
+        fprintf(stderr, "blob_length_%d\n", blob_length);
+#endif    
         float buf[128] = {0.f};
         int offset = 0;
         while (offset < blob_length)
@@ -434,18 +440,20 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
         
             offset += size;
             similarity = dot((float*)fc.data, buf);
+#if debug   
             fprintf(stderr, "%d_similarity:%f\n",i, similarity);
+#endif
             results.push_back(std::make_pair(i, similarity));
         }
         sqlite3_blob_close(blob);
     }
     
     int ID;
-    ID = knn(results, 3, param.threshold);
-    
+    ID = knn(results, 5, param.threshold);
+#if debug   
     finsh = clock();
     fprintf(stderr, "knn cost %d ms\n", (finsh - start)/1000);
-    
+#endif   
     return ID;
 
 }
