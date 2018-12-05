@@ -216,7 +216,7 @@ void DKFaceRegisterEnd(int flag, int count)
     {
         sqlite3_blob* blob = NULL;
         
-        //获取行数select * from sensor where address = 'aaaa::11:22ff:fe33:4461' order by id desc limit 0,1;
+        //获取行数
         sqlite3_stmt* stat;
         int rc = sqlite3_prepare_v2(facefeatures, "SELECT max(rowid),NUMFEA FROM FEATURES", -1, &stat, NULL);
         if(rc!=SQLITE_OK) {
@@ -400,7 +400,6 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     int rows, numfea;
     if( sqlite3_step(stat) == SQLITE_ROW ){
         rows = sqlite3_column_int(stat, 0);
-        numfea = sqlite3_column_int(stat, 1);
     } 
 
     sqlite3_finalize(stat);
