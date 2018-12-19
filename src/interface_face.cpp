@@ -135,6 +135,8 @@ int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDe
 
     //（unsigned char*）2（dlib::array2d<dlib::rgb_pixel>）  
     dlib::image_view<dlib::array2d<dlib::rgb_pixel>> imga(img);
+/*
+// rgb_meta
     for(int r = 0; r < iHeight; r++) 
     {
         const unsigned char* v = rgbData + r * iWidth * 3;
@@ -144,6 +146,22 @@ int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDe
             p.red = v[c*3];
             p.green = v[c*3+1];
             p.blue = v[c*3+2];
+            assign_pixel( imga[r][c], p );            
+        }
+    }
+*/
+// rgb_panel
+    const unsigned char* channel_r = rgbData;
+    const unsigned char* channel_g = rgbData + iHeight * iWidth;
+    const unsigned char* channel_b = rgbData + iHeight * iWidth * 2 ;
+    for(int r = 0; r < iHeight; r++) 
+    {
+        for(int c = 0; c < iWidth; c++)
+        {
+            dlib::rgb_pixel p;
+            p.red = channel_r[r * iWidth + c];
+            p.green = channel_g[r * iWidth + c];
+            p.blue = channel_b[r * iWidth + c];
             assign_pixel( imga[r][c], p );            
         }
     }
@@ -163,10 +181,14 @@ int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDe
     int x_right = box.x2 > box.x3 ? box.x2 : box.x3;
     y_top =  y_top > 0 ?  y_top : 0;
     x_left = x_left > 0 ? x_left : 0;
+    
+#ifdef JPG_DEMO
+    y_bottom = y_bottom < img.nr() ? y_bottom : img.nr(); 
+    x_right = x_right < img.nc() ? x_right : img.nc(); 
+#else
     y_bottom = y_bottom < iHeight ? y_bottom : iHeight; 
     x_right = x_right < iWidth ? x_right : iWidth; 
-    
-
+#endif
   
     dlib::rectangle det(x_left, y_top, x_right, y_bottom);
     dlib::shape_predictor sp;
@@ -332,6 +354,8 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
 
     //（unsigned char*）2（dlib::array2d<dlib::rgb_pixel>）  
     dlib::image_view<dlib::array2d<dlib::rgb_pixel>> imga(img);
+/*
+// rgb_meta
     for(int r = 0; r < iHeight; r++) 
     {
         const unsigned char* v = rgbData + r * iWidth * 3;
@@ -341,6 +365,22 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
             p.red = v[c*3];
             p.green = v[c*3+1];
             p.blue = v[c*3+2];
+            assign_pixel( imga[r][c], p );            
+        }
+    }
+*/
+// rgb_panel
+    const unsigned char* channel_r = rgbData;
+    const unsigned char* channel_g = rgbData + iHeight * iWidth;
+    const unsigned char* channel_b = rgbData + iHeight * iWidth * 2 ;
+    for(int r = 0; r < iHeight; r++) 
+    {
+        for(int c = 0; c < iWidth; c++)
+        {
+            dlib::rgb_pixel p;
+            p.red = channel_r[r * iWidth + c];
+            p.green = channel_g[r * iWidth + c];
+            p.blue = channel_b[r * iWidth + c];
             assign_pixel( imga[r][c], p );            
         }
     }
@@ -359,8 +399,14 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     int x_right = box.x2 > box.x3 ? box.x2 : box.x3;
     y_top =  y_top > 0 ?  y_top : 0;
     x_left = x_left > 0 ? x_left : 0;
+
+#ifdef JPG_DEMO
+    y_bottom = y_bottom < img.nr() ? y_bottom : img.nr(); 
+    x_right = x_right < img.nc() ? x_right : img.nc(); 
+#else
     y_bottom = y_bottom < iHeight ? y_bottom : iHeight; 
     x_right = x_right < iWidth ? x_right : iWidth; 
+#endif
     
     dlib::rectangle det(x_left, y_top, x_right, y_bottom);
     dlib::shape_predictor sp;
