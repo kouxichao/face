@@ -10,10 +10,13 @@ CFLAGS += $(MODE) $(debug) -O3 -fopenmp -mcpu=cortex-a53+simd -mcpu=cortex-a53+f
 SRCS := interface_face.cpp 
 
 ifeq ($(MODE), -DJPG_DEMO)
-all:interface_face demo_face
+all:detect_face interface_face evaluate demo_face 
 else 
 all:interface_face
 endif
+
+detect_face: 
+	aarch64-himix100-linux-g++ -o detect_face detect_face.cpp $(CFLAGS) 
 
 interface_face:
 	aarch64-himix100-linux-g++ $(SRCS) $(CFLAGS) -c -o interface_face.cpp.o 
@@ -21,3 +24,6 @@ interface_face:
 
 demo_face:interface_face
 	aarch64-himix100-linux-g++ demo_face.cpp  libface.a $(CFLAGS) -o demo_face 
+
+evaluate:interface_face
+	aarch64-himix100-linux-g++  evaluate.cpp    libface.a $(CFLAGS) -o evaluate 

@@ -5,7 +5,7 @@
 #include<cstring>
 int main(int argc, char* argv[])
 {
-    char *root_dir = argv[2];
+    const char *root_dir = argv[2];
     
     char bbox_path[50];
     strcpy(bbox_path, root_dir);
@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
     DKSFaceRecognizationParam rcp;
     rcp.index = 0;
     rcp.threshold = 0.3;
+    rcp.k = 5;
     char pre_name[50] = {};
 
     //注册
@@ -43,13 +44,13 @@ int main(int argc, char* argv[])
         {
 
             if((fscanf(fp, "%s %s %d,%d,%d,%d", name, idx, &right, &left, &bottom, &top)) == EOF)
-	        {
-			    fprintf(stderr, "fscanf end(error)\n");
+	    {
+	        fprintf(stderr, "fscanf end(error)\n");
                 break;
             }
 
             fprintf(stderr, "name : %s\n", name);
-	        if(strstr(name, "test") == NULL)
+	    if(strstr(name, "test") == NULL)
             {
                 std::string rgbfilename = std::string(root_dir) + std::string(name) + \
                  '/' + "support/" + name + "_" + idx;
@@ -89,7 +90,7 @@ int main(int argc, char* argv[])
         {
 	        fprintf(stderr, "fopen idx_name error\n");
         }
-        char idx_name[20][50];
+        char idx_name[20][30];
         int index = 0;
         while(fscanf(fp_idx_name, "%s", idx_name[index]) != EOF)
         {
@@ -107,46 +108,48 @@ int main(int argc, char* argv[])
         {
 
             if((fscanf(fp, "%s %s %d,%d,%d,%d", name, idx, &right, &left, &bottom, &top)) == EOF)
-	        {
-		        fprintf(stderr, "fscanf end(error)\n");
+	    {
+//		fprintf(stderr, "fscanf end(error)\n");
                 break;
             }
 
 //            fprintf(stderr, "name : %s\n", name);
-	        if(strstr(name, "test") != NULL && strcmp(name, "xiena_test") == 0)
+	    if(strstr(name, "test") != NULL)// && strcmp(name, "xiena_test") == 0)
             {
 //                fprintf(stderr, "ori_pos:%d_%d_%d_%d\n", right, left, top, bottom);
-
+//                 printf("name: %s\n", name); 
                 std::size_t found = std::string(name).find_last_of("_");
-                std::string rea_name = std::string(name).substr(0, found);  
-                std::string rgbfilename = std::string(root_dir) + rea_name + "/" + "test/" + name + "_" + idx;
-                
+                const std::string rea_name = std::string(name).substr(0, found);  
+                std::string rgbfilename = std::string(root_dir) + rea_name + std::string("/") + std::string("test/") + std::string(name) + std::string("_") + std::string(idx);
+
+std::string filename;
                 if(access((rgbfilename + std::string(".jpg")).data(), 0) == 0)
-                    rgbfilename = rgbfilename + std::string(".jpg");
+                    filename = rgbfilename + std::string(".jpg");
                 else
-                    rgbfilename = rgbfilename + std::string(".png");
+                    filename = rgbfilename + std::string(".png");
                 //
                 box[0].box = {left,top,right,top,right,bottom,left,bottom};
                 boxes.num = 1;
                 boxes.boxes[0] = box[0];
-//                printf("PATH: %s\n", rgbfilename.data()); 
 
-        	    id = DKFaceRecognizationProcess((char*)rgbfilename.data(), 100, 100, boxes, rcp);//示例中没有用到100,100两个参数。
+//                printf("PATH: %s\n", rgbfilename.data()); 
+//                 printf("rename: %s\n", rea_name.data()); 
+        	  id = DKFaceRecognizationProcess((char*)filename.data(), 100, 100, boxes, rcp);//示例中没有用到100,100两个参数。
         	    printf("image:%s \t gt_name:%s \t pre_name(ID):%s_(%d)\n", \
                 (std::string(name) + "_" + idx).data(), rea_name.data(), idx_name[id], id);
                 if((strcmp(rea_name.data(), idx_name[id])) == 0)
                     acc++;
                 num++;
             }
-	    }
+	}
 
        	DKFaceRecognizationEnd();
         fclose(fp_idx_name);
-                        printf("num:%d \t acc:%d \n", num, acc);
+        printf("num:%f \t acc:%f \n", num, acc);
 
         float accuracy = acc / num;
-        fprintf(stderr, "accuracy: %.2f%%\n", accuracy);
-	}
+        fprintf(stderr, "accuracy: %.2f%%\n", accuracy * 100);
+    }
 
     fclose(fp);
     return 0;

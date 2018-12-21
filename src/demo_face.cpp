@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
     DKSFaceRecognizationParam rcp;
     rcp.index = 0;
     rcp.threshold = 0.6;
+    rcp.k = 5;
     
     //注册
     if(*(argv[1]) == '0')

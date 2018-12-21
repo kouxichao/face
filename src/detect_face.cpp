@@ -1,8 +1,8 @@
-#include "dlib/dlib/image_processing/frontal_face_detector.h"
-#include "dlib/dlib/image_processing.h"
-#include "dlib/dlib/image_io.h"
+#include "dlib/image_processing/frontal_face_detector.h"
+#include "dlib/image_processing.h"
+#include "dlib/image_io.h"
 #include <stdio.h>
-#include "dlib/dlib/gui_widgets.h"
+//#include "dlib/dlib/gui_widgets.h"
 #include <string>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -53,7 +53,7 @@ void getAllImages(const char* path)
                 strcpy(pa, path);
                 strcat(pa, "/");    
                 load_image(img, strcat(pa, ptr -> d_name));
-                image_window win(img); 
+//                image_window win(img); 
 //	 		    pyramid_up(img);
 
          	    std::vector<rectangle> dets = detector(img);
@@ -71,7 +71,7 @@ void getAllImages(const char* path)
                         index = j;
                         area = width * height;
                     }
-                    win.add_overlay(dets[j]);
+//                    win.add_overlay(dets[j]);
                     dlib::sleep(1000);     
 		        }
                 FILE *fp = fopen("bbox.xy", "a+");
