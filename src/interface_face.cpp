@@ -26,12 +26,12 @@ float dot(float* fc1, float* fc2)
     return sum;
 }
 
-int normalize(ncnn::Mat& fc1)
+int normalize(float* fc1)
 {
-    float sq = sqrt(dot((float*)fc1.data, (float*)fc1.data));
-    for(int i=0; i<fc1.w*fc1.h*fc1.c; i++)
+    float sq = sqrt(dot(fc1, fc1));
+    for(int i=0; i<128; i++)
     {
-        *(fc1.row(0)+i) = (*(fc1.row(0)+i))/sq;
+        *(fc1+i) = (*(fc1+i))/sq;
     }
     return 0;
 }

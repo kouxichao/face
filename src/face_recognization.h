@@ -1,7 +1,7 @@
 #ifndef FACE_RECOGNIZATION_h
 #define FACE_RECOGNIZATION_h
-#include "net.h"
-
+//#include "net.h"
+#include<vector>
 #ifndef DKMAXBOXNUM
 #define DKMAXBOXNUM 30 // 最多可检测对象数目
 #endif
@@ -58,7 +58,7 @@ typedef struct
 float dot(float* fc1, float* fc2);
 
 //规范化向量
-int normalize(ncnn::Mat& fc1);
+int normalize(float* fc1);
 
 //knn最近邻实现
 int knn(std::vector< std::pair<int, float> >& re, int k);
