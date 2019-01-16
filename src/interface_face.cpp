@@ -126,7 +126,9 @@ int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDe
         fprintf(stderr, "error:read imgdata!");
         exit(1);
     }
-
+#if DEBUG
+    fprintf(stderr, "width_height: %d, %d", iWidth, iHeight);
+#endif
     unsigned char* rgbData = new unsigned char[iHeight*iWidth*3];
     fread(rgbData, 1, iHeight*iWidth*3, stream);
     fclose(stream); 
@@ -353,11 +355,11 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     fread(rgbData, 1, iHeight*iWidth*3, stream);
     fclose(stream); 
     
-    dlib::array2d<dlib::rgb_pixel> img, face_chips;
+    dlib::array2d<dlib::rgb_pixel> img(iHeight, iWidth), face_chips;
 
     //（unsigned char*）2（dlib::array2d<dlib::rgb_pixel>）  
     dlib::image_view<dlib::array2d<dlib::rgb_pixel>> imga(img);
-/*
+
 // rgb_meta
     for(int r = 0; r < iHeight; r++) 
     {
@@ -371,7 +373,7 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
             assign_pixel( imga[r][c], p );            
         }
     }
-*/
+/*
 // rgb_panel
     const unsigned char* channel_r = rgbData;
     const unsigned char* channel_g = rgbData + iHeight * iWidth;
@@ -387,7 +389,8 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
             assign_pixel( imga[r][c], p );            
         }
     }
- #endif
+*/
+#endif
 
 #ifdef JPG_DEMO
     //脸部对齐
@@ -429,7 +432,7 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     int col = (int)face_chips.nc();
     int row = (int)face_chips.nr();
 
-    ncnn::Mat in = ncnn::Mat::from_pixels_resize((unsigned char*)(&face_chips[0][0]), ncnn::Mat::PIXEL_RGB, col, row, 112, 112);
+    ncnn::Mat in = ncnn::Mat::/((unsigned char*)(&face_chips[0][0]), ncnn::Mat::PIXEL_RGB, col, row, 112, 112);
 #if DEBUG   
     start = clock();
 #endif

@@ -12,7 +12,7 @@ SRCS := interface_face.cpp
 ifeq ($(MODE), -DJPG_DEMO)
 all:detect_face interface_face evaluate demo_face 
 else 
-all:interface_face
+all:interface_face demo_face
 endif
 
 detect_face: 
