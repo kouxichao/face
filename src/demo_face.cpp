@@ -78,9 +78,12 @@ int main(int argc, char* argv[])
     {
         char*   rgbfilename = argv[2];
         DKFaceRecognizationInit();
-        id = DKFaceRecognizationProcess("face.data", m.nc(), m.nr(), boxes, rcp);
+        for(int i = 0; i < 200; i++)
+        {
+            id = DKFaceRecognizationProcess("face.data", m.nc(), m.nr(), boxes, rcp);
+            printf("%d_ID:%d\n", i,id);
+        }
         DKFaceRecognizationEnd();
-        printf("ID:%d\n", id);
     }
     return 0;
 }

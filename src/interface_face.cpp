@@ -177,6 +177,7 @@ int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDe
         }
     }
 
+    delete [] rgbData;
 #endif  
 
 #ifdef JPG_DEMO
@@ -401,6 +402,7 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     }
     #endif
 
+    delete [] rgbData;
 #endif
 
 #ifdef JPG_DEMO
@@ -546,4 +548,3 @@ void DKFaceRecognizationEnd()
 {
     sqlite3_close(facefeatures);
 }
-
