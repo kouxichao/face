@@ -23,8 +23,28 @@ int main(int argc, char* argv[])
         exit(1);
     } 
     
+#ifndef RGB_META
+    unsigned char* rgb_panel = new unsigned char[m.nc()*m.nr()*3];
+    unsigned char* rgb_panel_r = rgb_panel;
+    unsigned char* rgb_panel_g = rgb_panel + m.nc()*m.nr();
+    unsigned char* rgb_panel_b = rgb_panel + m.nc()*m.nr()*2;    
+
+    for(int r = 0; r < m.nr(); r++)
+    {
+	for(int c = 0; c < m.nc(); c++)
+	{
+	    rgb_panel_r[r*m.nc()+c] = m[r][c].red;
+	    rgb_panel_g[r*m.nc()+c] = m[r][c].green;
+	    rgb_panel_b[r*m.nc()+c] = m[r][c].blue;
+	}
+    }
 //    unsigned char* rgbData = new unsigned char[m.cols*m.rows*3];
+    fwrite(rgb_panel, 1, m.nc()*m.nr()*3, stream);
+#else
+    
     fwrite(&m[0][0], 1, m.nc()*m.nr()*3, stream);
+#endif
+//    unsigned char* rgbData = new unsigned char[m.cols*m.rows*3];
     fclose(stream);
 
     int  id, flag, count;

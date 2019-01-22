@@ -16,6 +16,15 @@ static  sqlite3* facefeatures;
 static  ncnn::Mat fc;
 
 //工具函数
+int dot_int(const int* fc1, const int* fc2)
+{
+    float sum = 0;
+    for(int i=0; i<128; i++)
+    {
+        sum += fc1[i] * fc2[i];
+    }
+                      
+}
 float dot(float* fc1, float* fc2)
 {
     float sum = 0;
@@ -90,7 +99,7 @@ int knn(std::vector< std::pair<int, float> >& re, int k, float threshold)
     }
     else
     {
-   		return -1; 
+   	return -1; 
     }
 }
 
@@ -360,7 +369,7 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     //（unsigned char*）2（dlib::array2d<dlib::rgb_pixel>）  
     dlib::image_view<dlib::array2d<dlib::rgb_pixel>> imga(img);
 
-// rgb_meta
+    #ifdef RGB_META
     for(int r = 0; r < iHeight; r++) 
     {
         const unsigned char* v = rgbData + r * iWidth * 3;
@@ -373,7 +382,8 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
             assign_pixel( imga[r][c], p );            
         }
     }
-/*
+
+    #else
 // rgb_panel
     const unsigned char* channel_r = rgbData;
     const unsigned char* channel_g = rgbData + iHeight * iWidth;
@@ -389,7 +399,8 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
             assign_pixel( imga[r][c], p );            
         }
     }
-*/
+    #endif
+
 #endif
 
 #ifdef JPG_DEMO
@@ -432,7 +443,7 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
     int col = (int)face_chips.nc();
     int row = (int)face_chips.nr();
 
-    ncnn::Mat in = ncnn::Mat::/((unsigned char*)(&face_chips[0][0]), ncnn::Mat::PIXEL_RGB, col, row, 112, 112);
+    ncnn::Mat in = ncnn::Mat::from_pixels_resize((unsigned char*)(&face_chips[0][0]), ncnn::Mat::PIXEL_RGB, col, row, 112, 112);
 #if DEBUG   
     start = clock();
 #endif
@@ -509,7 +520,10 @@ int DKFaceRecognizationProcess(char* rgbfilename, int iWidth, int iHeight, DKSMu
             }
         
             offset += size;
+//	    clock_t start = clock();
             similarity = dot((float*)fc.data, buf);
+//	    clock_t finsh = clock();
+//     	    fprintf(stderr,"dot cost %d ms\n", (finsh - start));
 #if DEBUG   
             fprintf(stderr, "%d_similarity:%f\n",i, similarity);
 #endif

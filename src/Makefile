@@ -1,11 +1,12 @@
 debug =
 MODE = 
+RGB_FORMAT =
 CFLAGS += -I$(PWD) \
 	-I$(PWD)/../ncnn \
 	-I$(PWD)/../sqlite \
 	-I$(PWD)/../dlib \
 	-L$(PWD)/../lib -lsqlite3 -ldlib -lncnn -ldl
-CFLAGS += $(MODE) $(debug) -O3 -fopenmp -mcpu=cortex-a53+simd -mcpu=cortex-a53+fp 
+CFLAGS += $(MODE) $(debug) $(RGB_FORMAT) -O3 -fopenmp -mcpu=cortex-a53+simd -mcpu=cortex-a53+fp 
 #SRCS := $(wildcard *.cpp)
 SRCS := interface_face.cpp 
 
