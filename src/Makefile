@@ -23,6 +23,13 @@ interface_face:
 	aarch64-himix100-linux-g++ $(SRCS) $(CFLAGS) -c -o interface_face.cpp.o 
 	ar r libface.a interface_face.cpp.o
 
+interface_face_switchalign:
+	aarch64-himix100-linux-g++ interface_face_switchalign.cpp $(CFLAGS) -c -o interface_face.cpp.o 
+	ar r libface.a interface_face.cpp.o
+
+demo_face_switchalign:interface_face_switchalign
+	aarch64-himix100-linux-g++ demo_face.cpp  libface.a $(CFLAGS) -o demo_face 
+
 demo_face:interface_face
 	aarch64-himix100-linux-g++ demo_face.cpp  libface.a $(CFLAGS) -o demo_face 
 

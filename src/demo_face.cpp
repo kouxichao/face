@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 
     int  id, flag, count;
     DKSSingleDetectionRes box[1];
-    box[0].box = {117, 61, 189, 61, 189, 133, 117,133};
+    box[0].box = {157, 141, 229, 141, 229, 213, 157, 213};//229,157,213,141 189,117,133,61
     DKSMultiDetectionRes boxes;
     boxes.num = 1;
     boxes.boxes[0] = box[0];
@@ -64,12 +64,14 @@ int main(int argc, char* argv[])
     if(*(argv[1]) == '0')
     {
         DKFaceRegisterInit();
-        int count = *(argv[2]) - 48;
-        for(int i = 0; i < count; i++)
+     //   int count = *(argv[3]) - 48;
+        for(int i = 0; i < 10; i++)
         {
-            char*   rgbfilename = argv[2+i+1];
+       //     char*   rgbfilename = argv[2+i+1];
             DKFaceRegisterProcess("face.data", m.nc(), m.nr(), boxes, rgp);
-            DKFaceRegisterEnd(count - (i+1) ? 1 : 0, i+1);
+printf("re\n");
+	    DKFaceRegisterEnd(1, i+1);
+          //  DKFaceRegisterEnd(count - (i+1) ? 1 : 0, i+1);
         }
     }
 

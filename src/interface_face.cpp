@@ -142,7 +142,7 @@ int DKFaceRegisterProcess(char* rgbfilename, int iWidth, int iHeight, DKSMultiDe
     fread(rgbData, 1, iHeight*iWidth*3, stream);
     fclose(stream); 
     
-    dlib::array2d<dlib::rgb_pixel> img, face_chips;
+    dlib::array2d<dlib::rgb_pixel> img(iHeight, iWidth), face_chips;
 
     //（unsigned char*）2（dlib::array2d<dlib::rgb_pixel>）  
     dlib::image_view<dlib::array2d<dlib::rgb_pixel>> imga(img);
